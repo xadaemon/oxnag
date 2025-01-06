@@ -2,6 +2,7 @@
 extern memccpy
 
 extern psystem
+extern system
 
 ; ===== [ INCLUDES ] =====
 %include "src/flags.inc"
@@ -64,6 +65,7 @@ xpopup:
 .show_popup:
     ; Show popup
     mov             rdi, command
-    call            psystem
+    ; call            psystem
+    call            system
 
     ret

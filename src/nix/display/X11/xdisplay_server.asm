@@ -2,8 +2,9 @@
 extern XOpenDisplay
 extern glXQueryVersion
 extern glXChooseFBConfig
-extern DefaultScreen
+extern XDefaultScreen
 extern glXGetVisualFromFBConfig
+extern glXGetFBConfigAttrib
 extern XFree
 
 extern xdisplay
@@ -29,9 +30,9 @@ section .data
     glx_minor       dd 0
     fbcount         dd 0
     samples         dd 0
-    best_num_samp   dd -1
+    best_num_samp   dq -1
     bestFbc	    dq NULL
-    samp_buf        dd 0
+    samp_buf        dq 0
 
     visual_attribs:
     dd GLX_X_RENDERABLE, 1, \
@@ -50,17 +51,20 @@ section .data
 ; ===== [  .TEXT   ] =====
 section .text
 
-; IN: RDI - title string (null-terminated)
-; IN: RSI - message string (null-terminated)
 ; OUT: RAX - bestFbc
 global xpick_best_fb
 xpick_best_fb:
+
+    fatal_error fatalTitle, badfbcMsg
 
     ; Open X display
     mov             rdi, NULL
     call            XOpenDisplay                            ; ==> Display*
     test            rax, rax
     jz              .failed_to_open
+
+.here
+    jmp .here
 
     mov             rbx, rax                                ; STORES[rbx]: Display*
     mov             [rel xdisplay], rax
@@ -89,7 +93,7 @@ xpick_best_fb:
 .valid_version:
 
     mov             rdi, rbx                                ; Display* display
-    call            DefaultScreen
+    call            XDefaultScreen
 
     mov             rdi, rbx                                ; Display* dpy
     mov             rsi, rax                                ; int screen
@@ -138,7 +142,7 @@ xpick_best_fb:
     mov             rax, [r13 + r12]
     mov             qword [rel bestFbc], rax
     mov             rax, [rel samples]
-    mov             dword [rel best_num_samp], rax
+    mov             qword [rel best_num_samp], rax
 
 
 .xfree:
