@@ -66,6 +66,7 @@ xpopup:
     ; Show popup
     mov             rdi, command
     ; call            psystem
+    add             rsp, 8
     call            system
-
+    sub             rsp, 8
     ret
