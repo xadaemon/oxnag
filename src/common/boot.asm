@@ -7,6 +7,7 @@
 extern strlen
 
 extern glGetString
+extern xpick_best_fb
 
 %macro log_gl_string 1
     mov             rcx, %1
@@ -57,9 +58,10 @@ section .text
 extern boot_process
 boot_process:
     prologue        32
+    call xpick_best_fb
 
     ; Run OS-specific boot process
-    os_spec_boot
+    ;os_spec_boot
 
     ; Bootup message
     log             header_msg, header_msg_len
