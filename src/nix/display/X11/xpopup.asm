@@ -63,10 +63,9 @@ xpopup:
     mov             byte [rel text + MAX_LENGTH + 1], 39
 
 .show_popup:
+    prologue 8
     ; Show popup
     mov             rdi, command
-    ; call            psystem
-    add             rsp, 8
     call            system
-    sub             rsp, 8
+    epilogue 8
     ret

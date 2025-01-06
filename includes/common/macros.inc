@@ -36,9 +36,7 @@
 ;  > 1: number - stack frame size
 %ifnmacro prologue
     %macro prologue 1
-        %ifidn TARGET_OS, OS_WINDOWS
             sub	rsp, %1
-        %endif
     %endmacro
 %endif
 
@@ -46,9 +44,7 @@
 ;  > 2: number - stack frame size
 %ifnmacro epilogue
     %macro epilogue 1
-        %ifidn TARGET_OS, OS_WINDOWS
             add rsp, %1
-        %endif
     %endmacro
 %endif
 
